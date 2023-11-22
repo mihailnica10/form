@@ -1,13 +1,284 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + Vue</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Helvetica, Sans-Serif;
+
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+
+        .m-signature-pad {
+            position: relative;
+            font-size: 10px;
+            width: 400px;
+            height: 400px;
+            border: 1px solid #e8e8e8;
+            background-color: #fff;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.27), 0 0 40px rgba(0, 0, 0, 0.08) inset;
+            border-radius: 4px;
+        }
+
+        .m-signature-pad:before,
+        .m-signature-pad:after {
+            position: absolute;
+            z-index: -1;
+            content: "";
+            width: 40%;
+            height: 10px;
+            left: 20px;
+            bottom: 10px;
+            background: transparent;
+            -webkit-transform: skew(-3deg) rotate(-3deg);
+            -moz-transform: skew(-3deg) rotate(-3deg);
+            -ms-transform: skew(-3deg) rotate(-3deg);
+            -o-transform: skew(-3deg) rotate(-3deg);
+            transform: skew(-3deg) rotate(-3deg);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .m-signature-pad:after {
+            left: auto;
+            right: 20px;
+            -webkit-transform: skew(3deg) rotate(3deg);
+            -moz-transform: skew(3deg) rotate(3deg);
+            -ms-transform: skew(3deg) rotate(3deg);
+            -o-transform: skew(3deg) rotate(3deg);
+            transform: skew(3deg) rotate(3deg);
+        }
+
+        .m-signature-pad--body {
+            position: absolute;
+            left: 20px;
+            right: 20px;
+            top: 20px;
+            bottom: 20px;
+            border: 1px solid #f4f4f4;
+        }
+
+        .m-signature-pad--body canvas {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.02) inset;
+        }
+
+        @media screen and (max-width: 1024px) {
+            .m-signature-pad {
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                width: auto;
+                height: auto;
+                min-width: 250px;
+                min-height: 250px;
+                margin: 5%;
+            }
+
+            #github {
+                display: none;
+            }
+        }
+
+        @media screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+            .m-signature-pad {
+                margin: 10%;
+            }
+        }
+
+        @media screen and (max-height: 320px) {
+            .m-signature-pad--body {
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 32px;
+            }
+
+            .m-signature-pad--footer {
+                left: 20px;
+                right: 20px;
+                bottom: 4px;
+                height: 28px;
+            }
+
+            .m-signature-pad--footer .description {
+                font-size: 1em;
+                margin-top: 1em;
+            }
+        }
+
+        .lds-roller {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+        .lds-roller div {
+            animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            transform-origin: 40px 40px;
+        }
+
+        .lds-roller div:after {
+            content: " ";
+            display: block;
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: rgb(0, 149, 255);
+            margin: -4px 0 0 -4px;
+        }
+
+        .lds-roller div:nth-child(1) {
+            animation-delay: -0.036s;
+        }
+
+        .lds-roller div:nth-child(1):after {
+            top: 63px;
+            left: 63px;
+        }
+
+        .lds-roller div:nth-child(2) {
+            animation-delay: -0.072s;
+        }
+
+        .lds-roller div:nth-child(2):after {
+            top: 68px;
+            left: 56px;
+        }
+
+        .lds-roller div:nth-child(3) {
+            animation-delay: -0.108s;
+        }
+
+        .lds-roller div:nth-child(3):after {
+            top: 71px;
+            left: 48px;
+        }
+
+        .lds-roller div:nth-child(4) {
+            animation-delay: -0.144s;
+        }
+
+        .lds-roller div:nth-child(4):after {
+            top: 72px;
+            left: 40px;
+        }
+
+        .lds-roller div:nth-child(5) {
+            animation-delay: -0.18s;
+        }
+
+        .lds-roller div:nth-child(5):after {
+            top: 71px;
+            left: 32px;
+        }
+
+        .lds-roller div:nth-child(6) {
+            animation-delay: -0.216s;
+        }
+
+        .lds-roller div:nth-child(6):after {
+            top: 68px;
+            left: 24px;
+        }
+
+        .lds-roller div:nth-child(7) {
+            animation-delay: -0.252s;
+        }
+
+        .lds-roller div:nth-child(7):after {
+            top: 63px;
+            left: 17px;
+        }
+
+        .lds-roller div:nth-child(8) {
+            animation-delay: -0.288s;
+        }
+
+        .lds-roller div:nth-child(8):after {
+            top: 56px;
+            left: 12px;
+        }
+
+        @keyframes lds-roller {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<div id="signature-pad" class="m-signature-pad">
+    <div class="m-signature-pad--body">
+        <canvas></canvas>
+    </div>
+</div>
+<button onclick="reset()" style="margin-bottom: 5em; width:100%;">reseteaza semnatura</button>
+<br />
+<input placeholder="Nume">
+<input placeholder="Prenume">
+<input placeholder="Telefon">
+<input placeholder="Email">
+<br />
+<button onclick="submit()" style="margin-top: 5em; width:100%;">trimite</button>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+    <script>
+        const canvas = document.querySelector("canvas");
+
+        const ratio = Math.max(window.devicePixelRatio || 1, 1);
+        canvas.width = canvas.offsetWidth * ratio;
+        canvas.height = canvas.offsetHeight * ratio;
+        canvas.getContext("2d").scale(ratio, ratio);
+        const signaturePad = new SignaturePad(canvas, {
+            penColor: "#0802b8"
+        });
+        const __u = atob('aHR0cHM6Ly9xcWRqZmpiZWhrc2Fobm5zYmNqcS5zdXBhYmFzZS5jbw==')
+        const _s = supabase.createClient(__u, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxZGpmamJlaGtzYWhubnNiY2pxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDA1ODE2ODQsImV4cCI6MjAxNjE1NzY4NH0.fjxnNjSMWO_KP1UwFVHEy2yxCFjIE1gWax66KjJ0PVM')
+        const submit = () => {
+            nume = document.querySelector("input[placeholder='Nume']").value;
+            prenume = document.querySelector("input[placeholder='Prenume']").value;
+            nrtel = document.querySelector("input[placeholder='Telefon']").value;
+            mail = document.querySelector("input[placeholder='Email']").value;
+            if (nume == '' || prenume == '' || nrtel == '' || mail == '') {
+                alert('completati toate campurile')
+                return
+            }
+            semnatura = signaturePad.toDataURL();
+            document.body.innerHTML = `<div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>`
+            _s
+                .from('signatures')
+                .insert([
+                    { nume: nume, prenume: prenume, nrtel: nrtel, mail: mail, semnatura: semnatura }
+                ])
+                .then((data) => {
+                    console.log(data)
+                    document.body.innerHTML = `<h1>semnatura trimisa cu succes</h1>`
+                })
+                .catch(console.error)
+        }
+        const reset = () => {
+            signaturePad.clear();
+        }
+    </script>
+</body>
+
 </html>
